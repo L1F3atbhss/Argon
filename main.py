@@ -1,7 +1,5 @@
 import pygame
 import sys
-import time
-import os
 
 # Initialize Pygame
 pygame.init()
@@ -18,18 +16,47 @@ BLACK = (0, 0, 0)
 LIGHTBLUE = (180, 215, 230)
 RED = (250, 0, 0)
 BLUE = (0, 0, 250)
-SKYBLUE = (135, 206, 235)
-CORNFLOWERBLUE = (154, 206, 235)
-BABYBLUE = (137, 207, 240)
-DODGERBLUE = (89, 174, 254)
 
 # Fonts
-font = pygame.font.Font(None, 50)
+font = pygame.font.Font(None, 80)
+button_font = pygame.font.Font(None, 60)
+
+# Draw a button
+def draw_button(text, x, y, width, height, color, text_color=BLACK):
+    pygame.draw.rect(screen, color, (x, y, width, height))
+    text_surf = button_font.render(text, True, text_color)
+    text_rect = text_surf.get_rect(center=(x + width // 2, y + height // 2))
+    screen.blit(text_surf, text_rect)
+    return pygame.Rect(x, y, width, height)
 
 # Main Menu
 def main_menu():
-    while True:
+    running = True
+    while running:
         screen.fill(WHITE)
-        pygame.display.set_caption("Argon: The last knight")
 
+        # Title
+        title = font.render("Argon: The Last Knight", True, BLACK)
+        title_rect = title.get_rect(center=(WIDTH // 2, 150))
+        screen.blit(title, title_rect)
 
+        # Buttons
+        play_button = draw_button("Play", 500, 300, 300, 80, LIGHTBLUE)
+        quit_button = draw_button("Quit", 500, 400, 300, 80, RED)
+
+        # Event handling
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if play_button.collidepoint(event.pos):
+                    print("Game Starting...")  # Replace with actual game start
+                elif quit_button.collidepoint(event.pos):
+                    running = False
+
+        pygame.display.flip()
+
+    pygame.quit()
+    sys.exit()
+
+main_menu()
