@@ -9,14 +9,7 @@ Welcome to **Argon: The Last Knight**, a retro-inspired 2D adventure game built 
 - **Engine:** [Pygame](https://www.pygame.org/)
 - **Language:** Python
 
-The game starts at the **main menu**, where you can choose to start your journey or exit the game.
-
 ## 🧠 Features
-
-- Custom-designed main menu with interactive buttons
-- Smooth game window using Pygame
-- Modular and clean codebase for future expansion
-- Multiple color schemes and responsive design elements
 
 > More gameplay features coming soon — including character movement, combat, enemies, and levels!
 
