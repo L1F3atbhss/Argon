@@ -59,4 +59,9 @@ def main_menu():
     pygame.quit()
     sys.exit()
 
+def playGame():
+    ran = True
+    while ran:
+        screen.fill(BLACK)
+
 main_menu()
