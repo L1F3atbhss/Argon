@@ -103,7 +103,7 @@ while running:
 
         draw_centered_text("Credits", menu_font, (255, 255, 255), 120)
         draw_centered_text("Argon: The Last Knight", small_font, (200, 200, 200), 180)
-        draw_centered_text("Created by Nathan Chan", small_font, (200, 200, 200), 220)
+        draw_centered_text("Created by L1f3atbhss", small_font, (200, 200, 200), 220)
         draw_centered_text("Powered by Python & Pygame", small_font, (200, 200, 200), 260)
         draw_centered_text("Press any key to return", small_font, (180, 180, 180), 340)
 
