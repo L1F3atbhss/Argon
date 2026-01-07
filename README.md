@@ -1,6 +1,6 @@
 # 🛡️ Argon: The Last Knight
 
-Welcome to **Argon: The Last Knight**, a retro-inspired 2D adventure game built with Python and Pygame. In this game, you play as Argon, the last knight of a forgotten realm, destined to defend his kingdom from impending doom.
+Welcome to **Argon: The Last Knight**, a retro-inspired 3D adventure game built with Python and Pygame. In this game, you play as Argon, the last knight of a forgotten realm, destined to defend his kingdom from impending doom.
 
 ## 🎮 Game Overview
 
