@@ -1,8 +1,9 @@
 import pygame
 import math
 
-# ---------- SETTINGS ----------
-WIDTH, HEIGHT = 800, 600
+#  SETTINGS 
+WIDTH = 950
+HEIGHT = 750
 FOV = math.pi / 3
 HALF_FOV = FOV / 2
 NUM_RAYS = 120
@@ -10,7 +11,7 @@ MAX_DEPTH = 800
 DELTA_ANGLE = FOV / NUM_RAYS
 SCALE = WIDTH // NUM_RAYS
 
-# ---------- MAP ----------
+#  MAP 
 MAP = [
     "########",
     "#......#",
@@ -25,20 +26,25 @@ TILE = 100
 MAP_WIDTH = len(MAP[0]) * TILE
 MAP_HEIGHT = len(MAP) * TILE
 
-# ---------- INIT ----------
+#  INIT 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
-# ---------- PLAYER ----------
+#  PLAYER 
 px, py = 150, 150
 angle = 0
 speed = 2
 
 def is_wall(x, y):
+    if x < 0 or y < 0:
+        return True
+    if x >= MAP_WIDTH or y >= MAP_HEIGHT:
+        return True
     return MAP[int(y // TILE)][int(x // TILE)] == "#"
 
-# ---------- GAME LOOP ----------
+
+# GAME LOOP 
 running = True
 while running:
     for event in pygame.event.get():
