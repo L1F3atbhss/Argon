@@ -1,67 +1,95 @@
 import pygame
-import sys
+import math
 
-# Initialize Pygame
+# ---------- SETTINGS ----------
+WIDTH, HEIGHT = 800, 600
+FOV = math.pi / 3
+HALF_FOV = FOV / 2
+NUM_RAYS = 120
+MAX_DEPTH = 800
+DELTA_ANGLE = FOV / NUM_RAYS
+SCALE = WIDTH // NUM_RAYS
+
+# ---------- MAP ----------
+MAP = [
+    "########",
+    "#......#",
+    "#..##...#",
+    "#......#",
+    "#..#....#",
+    "#......#",
+    "########"
+]
+
+TILE = 100
+MAP_WIDTH = len(MAP[0]) * TILE
+MAP_HEIGHT = len(MAP) * TILE
+
+# ---------- INIT ----------
 pygame.init()
-
-# Screen dimensions
-WIDTH = 1300
-HEIGHT = 750
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Argon: The last knight")
+clock = pygame.time.Clock()
 
-# Colors
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-LIGHTBLUE = (180, 215, 230)
-RED = (250, 0, 0)
-BLUE = (0, 0, 250)
+# ---------- PLAYER ----------
+px, py = 150, 150
+angle = 0
+speed = 2
 
-# Fonts
-font = pygame.font.Font(None, 80)
-button_font = pygame.font.Font(None, 60)
+def is_wall(x, y):
+    return MAP[int(y // TILE)][int(x // TILE)] == "#"
 
-# Draw a button
-def draw_button(text, x, y, width, height, color, text_color=BLACK):
-    pygame.draw.rect(screen, color, (x, y, width, height))
-    text_surf = button_font.render(text, True, text_color)
-    text_rect = text_surf.get_rect(center=(x + width // 2, y + height // 2))
-    screen.blit(text_surf, text_rect)
-    return pygame.Rect(x, y, width, height)
+# ---------- GAME LOOP ----------
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-# Main Menu
-def main_menu():
-    running = True
-    while running:
-        screen.fill(WHITE)
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_ESCAPE]:
+        running = False
 
-        # Title
-        title = font.render("Argon: The Last Knight", True, BLACK)
-        title_rect = title.get_rect(center=(WIDTH // 2, 150))
-        screen.blit(title, title_rect)
+    # Movement
+    dx = math.cos(angle) * speed
+    dy = math.sin(angle) * speed
 
-        # Buttons
-        play_button = draw_button("Play", 500, 300, 300, 80, LIGHTBLUE)
-        quit_button = draw_button("Quit", 500, 400, 300, 80, RED)
+    if keys[pygame.K_w] and not is_wall(px + dx, py + dy):
+        px += dx
+        py += dy
+    if keys[pygame.K_s] and not is_wall(px - dx, py - dy):
+        px -= dx
+        py -= dy
+    if keys[pygame.K_a]:
+        angle -= 0.04
+    if keys[pygame.K_d]:
+        angle += 0.04
 
-        # Event handling
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if play_button.collidepoint(event.pos):
-                    print("Game Starting...")  # Replace with actual game start
-                elif quit_button.collidepoint(event.pos):
-                    running = False
+    # Drawing
+    screen.fill((30, 30, 30))
+    pygame.draw.rect(screen, (70, 70, 70), (0, HEIGHT // 2, WIDTH, HEIGHT // 2))
 
-        pygame.display.flip()
+    ray_angle = angle - HALF_FOV
 
-    pygame.quit()
-    sys.exit()
+    for ray in range(NUM_RAYS):
+        for depth in range(1, MAX_DEPTH):
+            x = px + depth * math.cos(ray_angle)
+            y = py + depth * math.sin(ray_angle)
 
-def playGame():
-    ran = True
-    while ran:
-        screen.fill(BLACK)
+            if is_wall(x, y):
+                depth *= math.cos(angle - ray_angle)  # remove fish-eye
+                wall_height = 50000 / (depth + 0.0001)
 
-main_menu()
+                color = 255 / (1 + depth * depth * 0.00002)
+                pygame.draw.rect(
+                    screen,
+                    (color, color, color),
+                    (ray * SCALE, HEIGHT // 2 - wall_height // 2, SCALE, wall_height)
+                )
+                break
+
+        ray_angle += DELTA_ANGLE
+
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
