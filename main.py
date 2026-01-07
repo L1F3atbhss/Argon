@@ -1,9 +1,7 @@
 import pygame
 import math
 
-
-
-#  SETTINGS 
+#  SETTINGS
 WIDTH = 1267
 HEIGHT = 775
 FOV = math.pi / 3
@@ -21,17 +19,39 @@ game_state = MENU
 
 # INIT 
 pygame.init()
+pygame.display.set_caption("Argon: The Last Knight")
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
+SQW = 1000
+SQH = 1000
+
 #  MAP 
-MAP = [
+MAP67 = [
+    *[
+        "".join(["#" for x in range(SQW)]),
+        *[("#" + "".join(["." for x in range(SQW-2)]) + "#") for x in range(SQH)],
+        "".join(["#" for x in range(SQW)]),
+    ]
+]
+
+MAP =[
     "###########",
     "#......#..#",
-    "#..##.....#",
-    "#.........#",
-    "#.........#",
+    "#.#.#.....#",
+    "#.##.....##",
+    "#..#.......",
     "#.....##..#",
+    "##..#####.#"
+]
+
+area1 = [
+    "###########",
+    "#.......#.#",
+    "#..##..##.#",
+    "#..##.##..#",
+    "#..###....#",
+    "#...####.##",
     "###########"
 ]
 
@@ -49,6 +69,11 @@ px, py = 150, 150
 angle = 0
 speed = 2
 
+# Chest
+Chest_size = 255
+#Chest_image = pygame.image.load("Chest.png")
+#Chest_image = pygame.transform.scale(Chest_image, (Chest_size, Chest_size))
+
 def draw_centered_text(text, font, color, y):
     surface = font.render(text, True, color)
     rect = surface.get_rect(center=(WIDTH // 2, y))
@@ -61,6 +86,12 @@ def is_wall(x, y):
         return True
     return MAP[int(y // TILE)][int(x // TILE)] == "#"
 
+def chest(x, y):
+    if x < 0 or y < 0:
+        return True
+    if x >= MAP_WIDTH or y >= MAP_HEIGHT:
+        return True
+    return MAP[int(y // TILE)][int(x // TILE)] == "&"
 
 # GAME LOOP 
 running = True
@@ -83,7 +114,7 @@ while running:
         else:
             running = False
 
-    # ---------------- MENU ----------------
+    # MENU 
     if game_state == MENU:
         screen.fill((10, 10, 20))
 
@@ -97,7 +128,7 @@ while running:
         clock.tick(60)
         continue
 
-    # ---------------- CREDITS ----------------
+    # CREDITS
     if game_state == CREDITS:
         screen.fill((0, 0, 0))
 
@@ -111,7 +142,7 @@ while running:
         clock.tick(60)
         continue
 
-    # ---------------- GAME ----------------
+    # GAME
     dx = math.cos(angle) * speed
     dy = math.sin(angle) * speed
 
@@ -138,7 +169,7 @@ while running:
 
             if is_wall(x, y):
                 depth *= math.cos(angle - ray_angle)
-                wall_height = 50000 / (depth + 0.0001)
+                wall_height = (50000 / (depth + 0.0001))
 
                 color = 255 / (1 + depth * depth * 0.00002)
                 pygame.draw.rect(
@@ -150,7 +181,7 @@ while running:
 
         ray_angle += DELTA_ANGLE
 
-    draw_centered_text("Press C for Credits", small_font, (200, 200, 200), HEIGHT - 20)
+    #draw_centered_text("Press C for Credits", small_font, (200, 200, 200), HEIGHT - 20)
 
     pygame.display.flip()
     clock.tick(60)
