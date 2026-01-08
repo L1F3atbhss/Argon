@@ -6,8 +6,8 @@ WIDTH = 1267
 HEIGHT = 775
 FOV = math.pi / 3
 HALF_FOV = FOV / 2
-NUM_RAYS = 120
-MAX_DEPTH = 800
+NUM_RAYS = 180
+MAX_DEPTH = 750
 DELTA_ANGLE = FOV / NUM_RAYS
 SCALE = WIDTH // NUM_RAYS
 
@@ -26,7 +26,7 @@ clock = pygame.time.Clock()
 SQW = 1000
 SQH = 1000
 
-#  MAP 
+#  MAPs
 MAP67 = [
     *[
         "".join(["#" for x in range(SQW)]),
@@ -35,14 +35,23 @@ MAP67 = [
     ]
 ]
 
+# Main Map
 MAP =[
     "###########",
     "#......#..#",
     "#.#.#.....#",
-    "#.##.....##",
+    "#.###....##",
     "#..#.......",
+    "##....##..#",
+    "##.######.#",
+    "##..#######",
+    "#...#######",
+    "##....###.#",
     "#.....##..#",
-    "##..#####.#"
+    "#....####.#",
+    "##........#",
+    "###......##",
+    "#######..##"
 ]
 
 area1 = [
@@ -71,8 +80,8 @@ speed = 2
 
 # Chest
 Chest_size = 255
-#Chest_image = pygame.image.load("Chest.png")
-#Chest_image = pygame.transform.scale(Chest_image, (Chest_size, Chest_size))
+Chest_image = pygame.image.load("Chest.png")
+Chest_image = pygame.transform.scale(Chest_image, (Chest_size, Chest_size))
 
 def draw_centered_text(text, font, color, y):
     surface = font.render(text, True, color)
