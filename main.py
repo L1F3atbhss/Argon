@@ -82,7 +82,7 @@ angle = 0
 speed = 2
 SWORD_PICKUP_DIST = 40
 has_sword = False
-coins = 0
+coins = 0.1
 
 # Chest
 Chest_size = 255
@@ -134,7 +134,8 @@ while running:
             swords.append((cx + 20, cy + 20))
             print("Got Swords")
             coins = coins + 1
-            print("Coins:" + coins)
+            print("Coins:")
+            print(coins)
 
     # MENU 
     if game_state == MENU:
