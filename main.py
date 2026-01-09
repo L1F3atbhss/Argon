@@ -39,7 +39,7 @@ MAP67 = [
 MAP =[
     "###########",
     "#......#..#",
-    "#.#.#.....#",
+    "#.#$#.....#",
     "#.###....##",
     "#..#.......",
     "##....##..#",
@@ -64,9 +64,21 @@ area1 = [
     "###########"
 ]
 
+
+
 TILE = 100
 MAP_WIDTH = len(MAP[0]) * TILE
 MAP_HEIGHT = len(MAP) * TILE
+
+chests = []
+
+for row_idx, row in enumerate(MAP):
+    for col_idx, cell in enumerate(row):
+        if cell == "$":
+            chests.append((
+                col_idx * TILE + TILE // 2,
+                row_idx * TILE + TILE // 2
+            ))
 
 # FONTS
 title_font = pygame.font.SysFont("arialblack", 72)
@@ -94,13 +106,6 @@ def is_wall(x, y):
     if x >= MAP_WIDTH or y >= MAP_HEIGHT:
         return True
     return MAP[int(y // TILE)][int(x // TILE)] == "#"
-
-def chest(x, y):
-    if x < 0 or y < 0:
-        return True
-    if x >= MAP_WIDTH or y >= MAP_HEIGHT:
-        return True
-    return MAP[int(y // TILE)][int(x // TILE)] == "&"
 
 # GAME LOOP 
 running = True
@@ -190,7 +195,40 @@ while running:
 
         ray_angle += DELTA_ANGLE
 
-    #draw_centered_text("Press C for Credits", small_font, (200, 200, 200), HEIGHT - 20)
+    for cx, cy in chests:
+        dx = cx - px
+        dy = cy - py
+        distance = math.sqrt(dx*dx + dy*dy)
+
+        angle_to_chest = math.atan2(dy, dx)
+        delta_angle = angle_to_chest - angle
+
+        # Keep angle between -pi and pi
+        while delta_angle > math.pi:
+            delta_angle -= 2 * math.pi
+        while delta_angle < -math.pi:
+            delta_angle += 2 * math.pi
+
+        # Check if chest is inside FOV
+        if -HALF_FOV < delta_angle < HALF_FOV and distance > 30:
+            projected_dist = distance * math.cos(delta_angle)
+            chest_size = min(600, int(50000 / projected_dist))
+
+            screen_x = int(
+                (delta_angle + HALF_FOV) / FOV * WIDTH
+            )
+
+            chest_img = pygame.transform.scale(
+                Chest_image, (chest_size, chest_size)
+            )
+
+            screen.blit(
+                chest_img,
+                (screen_x - chest_size // 2,
+                HEIGHT // 2 - chest_size // 2)
+            )
+
+        #draw_centered_text("Press C for Credits", small_font, (200, 200, 200), HEIGHT - 20)
 
     pygame.display.flip()
     clock.tick(60)
