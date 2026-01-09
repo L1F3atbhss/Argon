@@ -95,6 +95,11 @@ Chest_size = 255
 Chest_image = pygame.image.load("Chest.png")
 Chest_image = pygame.transform.scale(Chest_image, (Chest_size, Chest_size))
 
+# sword
+sword_size = 255
+sword_image = pygame.image.load("Chest.png")
+sword_image = pygame.transform.scale(sword_image, (sword_size, sword_size))
+
 def draw_centered_text(text, font, color, y):
     surface = font.render(text, True, color)
     rect = surface.get_rect(center=(WIDTH // 2, y))
