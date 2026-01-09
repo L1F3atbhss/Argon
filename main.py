@@ -82,7 +82,7 @@ angle = 0
 speed = 2
 SWORD_PICKUP_DIST = 40
 has_sword = False
-coins = 0.1
+coins = 0
 
 # Chest
 Chest_size = 255
